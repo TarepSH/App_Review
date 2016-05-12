@@ -12,6 +12,13 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+  @reviews = Review.where(product_id: @product.id).order("created_at DESC")  
+  
+  if @reviews.blank?
+    @avg_reviews = 0 
+  else
+      @avg_reviews = @reviews.average(:rating).round(2)
+    end
   end
 
   # GET /products/new
@@ -71,6 +78,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :description, :user_id, :image)
+      params.require(:product).permit(:name, :description, :user_id, :image, :product_id, :description )
     end
 end
